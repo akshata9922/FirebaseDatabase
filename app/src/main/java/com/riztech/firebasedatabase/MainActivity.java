@@ -7,9 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.riztech.firebasedatabase.fragment.AddEmployeeFragment;
 import com.riztech.firebasedatabase.fragment.ViewAllEmployeeFragment;
 
@@ -44,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         changeFragment(new AddEmployeeFragment());
+
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        FirebaseMessaging.getInstance().subscribeToTopic("news").addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getApplicationContext(),"subscribed",Toast.LENGTH_LONG).show();
+            }
+        });
+        Log.d("Notification", "Refreshed token: " + refreshedToken);
     }
 
     public void changeFragment(Fragment fragment) {

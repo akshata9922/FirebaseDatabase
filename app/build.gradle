@@ -34,6 +34,9 @@ dependencies {
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-database:16.0.1'
+
+    // Firebase plugin
+    implementation 'com.google.firebase:firebase-messaging:17.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

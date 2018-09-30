@@ -1,5 +1,6 @@
 package com.riztech.firebasedatabase.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,12 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.riztech.firebasedatabase.R;
+import com.riztech.firebasedatabase.UpdateEmployeeActivity;
 import com.riztech.firebasedatabase.adapter.EmployeeClickListener;
 import com.riztech.firebasedatabase.adapter.EmployeeListAdapter;
 import com.riztech.firebasedatabase.models.Employee;
@@ -100,11 +104,25 @@ public class ViewAllEmployeeFragment extends Fragment implements EmployeeClickLi
 
     @Override
     public void onDeleteClick(int position) {
+        Employee employee=employeeListAdapter.getItemAtPosition(position);
+        String id=employee.getId();
+        progress.setVisibility(View.VISIBLE);
+
+       mDatabaseReference.child(id).removeValue(new DatabaseReference.CompletionListener() {
+           @Override
+           public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+               progress.setVisibility(View.GONE);
+           }
+       });
 
     }
 
     @Override
     public void onItemClick(int position) {
+        Intent intent=new Intent(getActivity(), UpdateEmployeeActivity.class);
+        Employee employee=employeeListAdapter.getItemAtPosition(position);
+        intent.putExtra(UpdateEmployeeActivity.DATA,employee);
+        startActivity(intent);
 
     }
 }
